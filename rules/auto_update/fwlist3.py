@@ -26,8 +26,8 @@ if len(sys.argv) != 2:
 outfile = sys.argv[1]
  
 # the url of gfwlist
-# baseurl = 'https://raw.githubusercontent.com/Loukky/gfwlist-by-loukky/master/gfwlist.txt'
-baseurl = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
+baseurl = 'https://raw.githubusercontent.com/Loukky/gfwlist-by-loukky/master/gfwlist.txt'
+# baseurl = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
 # baseurl = 'https://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt'
 # match comments/title/whitelist/ip address
 comment_pattern = '^\!|\[|^@@|^\d+\.\d+\.\d+\.\d+'
@@ -37,7 +37,7 @@ tmpfile = '/tmp/gfwlisttmp'
 #outfile = '/tmp/gfwlist.conf'
 #rulesfile = '/etc/dnsmasq.d/gfwlist.conf'
  
-print('fetching list...')
+print('fetching GFW list...')
 if py_version == 2:
     content = urllib.request.urlopen(baseurl, timeout=15).read().decode('base64')
 else:
@@ -68,9 +68,9 @@ for line in lines.split('\n'):
             except ValueError:
                 #print 'saving ' + domain[0]
                 domainlist.append(domain[0])
-                fs.write('server=/.%s/%s#%s\n'%(domain[0],mydnsip,mydnsport))
-                fs.write('ipset=/.%s/gfwlist\n'%domain[0])
-#                 fs.write('%s\n'%domain[0])
+                # fs.write('server=/.%s/%s#%s\n'%(domain[0],mydnsip,mydnsport))
+                # fs.write('ipset=/.%s/gfwlist\n'%domain[0])
+                fs.write('%s\n'%domain[0])
         else:
             print('no valid domain in this line: ',line)
                     

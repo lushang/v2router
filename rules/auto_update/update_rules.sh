@@ -2,7 +2,7 @@
 CurrentDate=$(date +%Y-%m-%d)
 # ======================================
 # get gfwlist for shadowsocks ipset mode
-./fwlist.py gfwlist_download.conf
+./fwlist3.py gfwlist_download.conf
 
 grep -Ev "([0-9]{1,3}[\.]){3}[0-9]{1,3}" gfwlist_download.conf >gfwlist_download_tmp.conf
 
@@ -31,7 +31,7 @@ else
 	cp -f gfwlist1.conf ../gfwlist.conf
 	sed -i "1c $(date +%Y-%m-%d) # $md5sum1 gfwlist" ../version1
 fi
-echo =================
+echo =======chnroute==========
 # ======================================
 # get chnroute for shadowsocks chn and game mode
 
@@ -59,9 +59,9 @@ echo =================
 # ======================================
 # get cdn list for shadowsocks chn and game mode
 
-wget -4 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
-wget -4 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf
-wget -4 https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf
+curl -O https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf
+curl -O https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/apple.china.conf
+curl -O https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/google.china.conf
 
 cat accelerated-domains.china.conf apple.china.conf google.china.conf | sed '/^#/d' | sed "s/server=\/\.//g" | sed "s/server=\///g" | sed -r "s/\/\S{1,30}//g" | sed -r "s/\/\S{1,30}//g" >cdn_download.txt
 cat cdn_koolshare.txt cdn_download.txt | sort -u >cdn1.txt
@@ -80,7 +80,7 @@ fi
 echo =================
 # ======================================
 # use apnic data
-wget -4 -O- http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest >apnic.txt
+curl http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest >apnic.txt
 cat apnic.txt | awk -F\| '/CN\|ipv4/ { printf("%s/%d\n", $4, 32-log($5)/log(2)) }' >chnroute1.txt
 
 echo -e "[Local Routing]\n## China mainland routing blocks\n## Sources: https://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest" >Routing.txt

@@ -17,6 +17,7 @@ import base64
  
 #mydnsip = '127.0.0.1'
 #mydnsport = '1053'
+py_version = sys.version_info[0]
 
 if len(sys.argv) != 2:
     print("fwlist.py outfile.txt")
@@ -25,8 +26,8 @@ if len(sys.argv) != 2:
 outfile = sys.argv[1]
  
 # the url of gfwlist
-# baseurl = 'https://raw.githubusercontent.com/Loukky/gfwlist-by-loukky/master/gfwlist.txt'
-baseurl = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
+baseurl = 'https://raw.githubusercontent.com/Loukky/gfwlist-by-loukky/master/gfwlist.txt'
+# baseurl = 'https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt'
 # baseurl = 'https://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt'
 # match comments/title/whitelist/ip address
 comment_pattern = '^\!|\[|^@@|^\d+\.\d+\.\d+\.\d+'
@@ -41,9 +42,13 @@ fs = open(outfile, 'w')
 #fs.write('# updated on ' + datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") + '\n')
 #fs.write('#\n')
  
-print('fetching list...')
+print('fetching GFW list...')
 # content = urllib2.urlopen(baseurl, timeout=15).read().decode('base64')
-content = urllib.request.urlopen(baseurl, timeout=15).read().decode('base64')
+if py_version == 2:
+    content = urllib.request.urlopen(baseurl, timeout=15).read().decode('base64')
+else:
+    content = urllib.request.urlopen(baseurl, timeout=15).read()
+# content = urllib.request.urlopen(baseurl, timeout=15).read().decode('base64')
  
 # write the decoded content to file then read line by line
 tfs = open(tmpfile, 'w')
